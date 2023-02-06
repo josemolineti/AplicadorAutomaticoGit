@@ -8,31 +8,47 @@ database = sqlite3.connect('data_bases.db')
 cursor = database.cursor()
 cursor.execute("CREATE TABLE IF NOT EXISTS coordenadas (id integer,registrado integer, x_abrir integer, y_abrir integer, x_cinza integer, y_cinza integer, x_verde integer, y_verde integer, x_amarelo integer, y_amarelo integer, x_azul integer, y_azul integer, x_vermelho integer, y_vermelho integer, x_branco integer, y_branco integer)")
 
-#cursor.execute("UPDATE coordenadas SET registrado = 0 WHERE registrado = 1")
 
 #cursor.execute("INSERT INTO coordenadas (id) VALUES(1)")
 
 database.commit()
 
 def zerar_valores():
-    cursor.execute("UPDATE coordenadas SET registrado = 0 WHERE id = 1")
-    cursor.execute("UPDATE coordenadas SET x_abrir = 0 WHERE id = 1")
-    cursor.execute("UPDATE coordenadas SET y_abrir = 0 WHERE id = 1")
-    cursor.execute("UPDATE coordenadas SET x_cinza = 0 WHERE id = 1")
-    cursor.execute("UPDATE coordenadas SET y_cinza = 0 WHERE id = 1")
-    cursor.execute("UPDATE coordenadas SET x_verde = 0 WHERE id = 1")
-    cursor.execute("UPDATE coordenadas SET y_verde = 0 WHERE id = 1")
-    cursor.execute("UPDATE coordenadas SET x_amarelo = 0 WHERE id = 1")
-    cursor.execute("UPDATE coordenadas SET y_amarelo = 0 WHERE id = 1")
-    cursor.execute("UPDATE coordenadas SET x_azul = 0 WHERE id = 1")
-    cursor.execute("UPDATE coordenadas SET y_azul = 0 WHERE id = 1")
-    cursor.execute("UPDATE coordenadas SET x_vermelho = 0 WHERE id = 1")
-    cursor.execute("UPDATE coordenadas SET y_vermelho = 0 WHERE id = 1")
-    cursor.execute("UPDATE coordenadas SET x_branco = 0 WHERE id = 1")
-    cursor.execute("UPDATE coordenadas SET y_branco = 0 WHERE id = 1")
+    database = sqlite3.connect('data_bases.db')
+    cursor = database.cursor()
+    cursor.execute("SELECT registrado FROM coordenadas WHERE id = 1")
+
+    is_regis = cursor.fetchall()
 
 
-zerar_valores()
+    if is_regis[0][0] == 1:
+        quest = messagebox.askyesno("Zerar Pontos","Tem certeza que deseja resetar suas coordenadas?")
+        if quest == 'yes':
+            cursor.execute("UPDATE coordenadas SET registrado = 0 WHERE id = 1")
+            cursor.execute("UPDATE coordenadas SET x_abrir = 0 WHERE id = 1")
+            cursor.execute("UPDATE coordenadas SET y_abrir = 0 WHERE id = 1")
+            cursor.execute("UPDATE coordenadas SET x_cinza = 0 WHERE id = 1")
+            cursor.execute("UPDATE coordenadas SET y_cinza = 0 WHERE id = 1")
+            cursor.execute("UPDATE coordenadas SET x_verde = 0 WHERE id = 1")
+            cursor.execute("UPDATE coordenadas SET y_verde = 0 WHERE id = 1")
+            cursor.execute("UPDATE coordenadas SET x_amarelo = 0 WHERE id = 1")
+            cursor.execute("UPDATE coordenadas SET y_amarelo = 0 WHERE id = 1")
+            cursor.execute("UPDATE coordenadas SET x_azul = 0 WHERE id = 1")
+            cursor.execute("UPDATE coordenadas SET y_azul = 0 WHERE id = 1")
+            cursor.execute("UPDATE coordenadas SET x_vermelho = 0 WHERE id = 1")
+            cursor.execute("UPDATE coordenadas SET y_vermelho = 0 WHERE id = 1")
+            cursor.execute("UPDATE coordenadas SET x_branco = 0 WHERE id = 1")
+            cursor.execute("UPDATE coordenadas SET y_branco = 0 WHERE id = 1")
+
+            database.commit()
+            database.close()
+
+            cursor.execute("UPDATE coordenadas SET registrado = 0 WHERE id = 1")
+
+            messagebox.showwarning("Pontos Zerados","Suas coordenadas foram resetadas com SUCESSO.\n\nPara registrar novamente, basta apertar em REGISTRAR.")
+
+    else:
+        messagebox.showerror("Erro","Você ainda não registrou suas coordenadas, para registrar clique em REGISTRAR")
 
 
 
@@ -46,31 +62,47 @@ def colect_points(titulo, txt, alerta, pontox, pontoy):
     x, y = pyautogui.position()
     print(x, y)
     messagebox.showwarning("Sucesso", alerta)
+
+    database = sqlite3.connect('data_bases.db')
+    cursor = database.cursor()
     cursor.execute("UPDATE coordenadas SET "+str(pontox)+" = "+str(x)+","+str(pontoy)+" = "+str(y)+" WHERE id = 1")
 
     database.commit()
+    database.close()
 
     return 0
 
 
 
 def register_points():
-    try:
 
-        ("UPDATE coordenadas IF(registrado = 0  SET registrado = 1 WHERE registrado >= 1")
+    database = sqlite3.connect('data_bases.db')
+    cursor = database.cursor()
 
-    except NameError as erro:
-        #print(erro)
+    cursor.execute("SELECT registrado FROM coordenadas WHERE id = 1")
+
+    is_regis = cursor.fetchall()
+    print(is_regis)
+    print(is_regis[0][0])
+
+    if (is_regis[0][0] == 1):
+        print("Ok")
         quest = messagebox.askquestion("Erro", "Você já registrou as coordenadas. \n\nDeseja registrar novamente?")
-        if quest == 'Yes':
+        if quest == 'yes':
+            database = sqlite3.connect('data_bases.db')
+            cursor = database.cursor()
+
             cursor.execute("UPDATE coordenadas SET registrado = 0 WHERE id = 1")
+            database.commit()
             database.close()
-            cursor.close()
-        else:
-            pass
-    #finally:
-        # cursor.execute("UPDATE coordenadas SET registrado = 0 WHERE id = 1")
-        database.commit()
+
+
+            register_points()
+
+
+
+    else:
+        print("Ok 2")
 
         messagebox.showinfo("Registrar pontos na tela","Para iniciar, esteja com o Habbo aberto e entre em algum quarto. Em seguida, aperte OK e siga os passos.")
 
@@ -96,12 +128,25 @@ def register_points():
         colect_points("Balão Branco","8 - Coletar Balão cor BRANCO, siga os passos CORRETAMENTE:\n\n1. Aperte OK;\n2. Posicione o mouse sobre o balão BRANCO (NÃO clique);\n3. Com o mouse em cima, aperte F12","Coordenadas do balão BRANCO coletadas com SUCESSO.", "x_branco", "y_branco")
 
         quest = messagebox.askquestion("Confirmar","Coordenadas coletadas com sucesso.\nCaso ache que algo dê errado, aperte YES para coletar novamente, e NO para prosseguir.")
-        if quest == 'Yes':
+
+        database = sqlite3.connect('data_bases.db')
+        cursor = database.cursor()
+
+        cursor.execute("UPDATE coordenadas SET registrado = 1 WHERE id = 1")
+        database.commit()
+        database.close()
+
+        if quest == 'yes':
+            database = sqlite3.connect('data_bases.db')
+            cursor = database.cursor()
+
+            cursor.execute("UPDATE coordenadas SET registrado = 0 WHERE id = 1")
+            database.commit()
+            database.close()
+
             register_points()
         else:
             messagebox.showinfo("Sucesso","Suas coordenadas foram coletadas e armazenadas com sucesso.\n\nCaso não esteja funcionando corretamente, colete novamente.")
-
-
 
 
 
@@ -113,6 +158,15 @@ cor_btn = "#000"
 cor_bd_btn = "#00dd9b"
 tam_bd_btn = 119
 hei_bd_btn = 31
+
+barra_menu=Menu(inicial)
+menuAjuda=Menu(barra_menu)
+menuAjuda.add_command(label="Zerar Pontos", command=zerar_valores)
+menuAjuda.add_separator()
+menuAjuda.add_command(label="Sair", command=inicial.quit)
+barra_menu.add_cascade(label="Ajuda",menu=menuAjuda)
+
+inicial.configure(menu=barra_menu)
 
 
 inicial.title("Aplicador de Cursos - DPH")
