@@ -14,13 +14,28 @@ cursor.execute("CREATE TABLE IF NOT EXISTS coordenadas (id integer,registrado in
 
 database.commit()
 
-teste = cursor.execute("SELECT registrado FROM coordenadas")
-print(teste)
-if cursor.fetchone() == 0:
-    print("OI")
+def zerar_valores():
+    cursor.execute("UPDATE coordenadas SET registrado = 0 WHERE id = 1")
+    cursor.execute("UPDATE coordenadas SET x_abrir = 0 WHERE id = 1")
+    cursor.execute("UPDATE coordenadas SET y_abrir = 0 WHERE id = 1")
+    cursor.execute("UPDATE coordenadas SET x_cinza = 0 WHERE id = 1")
+    cursor.execute("UPDATE coordenadas SET y_cinza = 0 WHERE id = 1")
+    cursor.execute("UPDATE coordenadas SET x_verde = 0 WHERE id = 1")
+    cursor.execute("UPDATE coordenadas SET y_verde = 0 WHERE id = 1")
+    cursor.execute("UPDATE coordenadas SET x_amarelo = 0 WHERE id = 1")
+    cursor.execute("UPDATE coordenadas SET y_amarelo = 0 WHERE id = 1")
+    cursor.execute("UPDATE coordenadas SET x_azul = 0 WHERE id = 1")
+    cursor.execute("UPDATE coordenadas SET y_azul = 0 WHERE id = 1")
+    cursor.execute("UPDATE coordenadas SET x_vermelho = 0 WHERE id = 1")
+    cursor.execute("UPDATE coordenadas SET y_vermelho = 0 WHERE id = 1")
+    cursor.execute("UPDATE coordenadas SET x_branco = 0 WHERE id = 1")
+    cursor.execute("UPDATE coordenadas SET y_branco = 0 WHERE id = 1")
 
-else:
-    print("Tchau")
+
+zerar_valores()
+
+
+
 
 inicial=Tk()
 
@@ -35,26 +50,16 @@ def colect_points(titulo, txt, alerta, pontox, pontoy):
 
     database.commit()
 
-
-
-
     return 0
 
 
 
 def register_points():
-    if cursor.execute("SELECT registrado FROM coordenadas") == 1:
-        print("Oi")
-    else:
-        print("Tchau")
-    #try:
+    try:
 
+        ("UPDATE coordenadas IF(registrado = 0  SET registrado = 1 WHERE registrado >= 1")
 
-
-
-        #("UPDATE coordenadas IF(registrado = 0  SET registrado = 1 WHERE registrado >= 1")
-
-    #except NameError as erro:
+    except NameError as erro:
         #print(erro)
         quest = messagebox.askquestion("Erro", "Você já registrou as coordenadas. \n\nDeseja registrar novamente?")
         if quest == 'Yes':
@@ -67,51 +72,34 @@ def register_points():
         # cursor.execute("UPDATE coordenadas SET registrado = 0 WHERE id = 1")
         database.commit()
 
-        messagebox.showinfo("Registrar pontos na tela",
-                            "Para iniciar, esteja com o Habbo aberto e entre em algum quarto. Em seguida, aperte OK e siga os passos.")
+        messagebox.showinfo("Registrar pontos na tela","Para iniciar, esteja com o Habbo aberto e entre em algum quarto. Em seguida, aperte OK e siga os passos.")
 
         # COLETAR PALETA DE BALÕES
-        colect_points("Paleta de Balões",
-                      "1 - Coletar posição da paleta de balões, siga os passos CORRETAMENTE:\n\n1. Aperte OK;\n2. Posicione o mouse sobre o botão de abrir a seleção de balões (NÃO clique);\n3. Com o mouse em cima, aperte F12;",
-                      "Coordenadas coletadas com SUCESSO.", "x_abrir", "y_abrir")
+        colect_points("Paleta de Balões","1 - Coletar posição da paleta de balões, siga os passos CORRETAMENTE:\n\n1. Aperte OK;\n2. Posicione o mouse sobre o botão de abrir a seleção de balões (NÃO clique);\n3. Com o mouse em cima, aperte F12;","Coordenadas coletadas com SUCESSO.", "x_abrir", "y_abrir")
 
         # COLETAR BALÃO CINZA
-        colect_points("Balão Cinza",
-                      "2 - Coletar Balão cor CINZA, siga os passos CORRETAMENTE:\n\n1. Aperte OK;\n2. Posicione o mouse sobre o balão CINZA (NÃO clique);\n3. Com o mouse em cima, aperte F12",
-                      "Coordenadas do balão CINZA coletadas com SUCESSO.", "x_cinza", "y_cinza")
+        colect_points("Balão Cinza","2 - Coletar Balão cor CINZA, siga os passos CORRETAMENTE:\n\n1. Aperte OK;\n2. Posicione o mouse sobre o balão CINZA (NÃO clique);\n3. Com o mouse em cima, aperte F12","Coordenadas do balão CINZA coletadas com SUCESSO.", "x_cinza", "y_cinza")
 
         # COLETAR BALÃO VERDE
-        colect_points("Balão Verde",
-                      "3 - Coletar Balão cor VERDE, siga os passos CORRETAMENTE:\n\n1. Aperte OK;\n2. Posicione o mouse sobre o balão VERDE (NÃO clique);\n3. Com o mouse em cima, aperte F12",
-                      "Coordenadas do balão VERDE coletadas com SUCESSO.", "x_verde", "y_verde")
+        colect_points("Balão Verde","3 - Coletar Balão cor VERDE, siga os passos CORRETAMENTE:\n\n1. Aperte OK;\n2. Posicione o mouse sobre o balão VERDE (NÃO clique);\n3. Com o mouse em cima, aperte F12","Coordenadas do balão VERDE coletadas com SUCESSO.", "x_verde", "y_verde")
 
         # COLETAR BALÃO AMARELO
-        colect_points("Balão Amarelo",
-                      "4 - Coletar Balão cor AMARELO, siga os passos CORRETAMENTE:\n\n1. Aperte OK;\n2. Posicione o mouse sobre o balão AMARELO (NÃO clique);\n3. Com o mouse em cima, aperte F12",
-                      "Coordenadas do balão AMARELO coletadas com SUCESSO.", "x_amarelo", "y_amarelo")
+        colect_points("Balão Amarelo","4 - Coletar Balão cor AMARELO, siga os passos CORRETAMENTE:\n\n1. Aperte OK;\n2. Posicione o mouse sobre o balão AMARELO (NÃO clique);\n3. Com o mouse em cima, aperte F12","Coordenadas do balão AMARELO coletadas com SUCESSO.", "x_amarelo", "y_amarelo")
 
         # COLETAR BALÃO AZUL
-        colect_points("Balão Azul",
-                      "5 - Coletar Balão cor AZUL, siga os passos CORRETAMENTE:\n\n1. Aperte OK;\n2. Posicione o mouse sobre o balão AZUL (NÃO clique);\n3. Com o mouse em cima, aperte F12",
-                      "Coordenadas do balão AZUL coletadas com SUCESSO.", "x_azul", "y_azul")
+        colect_points("Balão Azul","5 - Coletar Balão cor AZUL, siga os passos CORRETAMENTE:\n\n1. Aperte OK;\n2. Posicione o mouse sobre o balão AZUL (NÃO clique);\n3. Com o mouse em cima, aperte F12","Coordenadas do balão AZUL coletadas com SUCESSO.", "x_azul", "y_azul")
 
         # COLETAR BALÃO VERMELHO
-        colect_points("Balão Vermelho",
-                      "7 - Coletar Balão cor VERMELHO, siga os passos CORRETAMENTE:\n\n1. Aperte OK;\n2. Posicione o mouse sobre o balão VERMELHO (NÃO clique);\n3. Com o mouse em cima, aperte F12",
-                      "Coordenadas do balão VERMELHO coletadas com SUCESSO.", "x_vermelho", "y_vermelho")
+        colect_points("Balão Vermelho","7 - Coletar Balão cor VERMELHO, siga os passos CORRETAMENTE:\n\n1. Aperte OK;\n2. Posicione o mouse sobre o balão VERMELHO (NÃO clique);\n3. Com o mouse em cima, aperte F12","Coordenadas do balão VERMELHO coletadas com SUCESSO.", "x_vermelho", "y_vermelho")
 
         # COLETAR BALÃO BRANCO
-        colect_points("Balão Branco",
-                      "8 - Coletar Balão cor BRANCO, siga os passos CORRETAMENTE:\n\n1. Aperte OK;\n2. Posicione o mouse sobre o balão BRANCO (NÃO clique);\n3. Com o mouse em cima, aperte F12",
-                      "Coordenadas do balão BRANCO coletadas com SUCESSO.", "x_branco", "y_branco")
+        colect_points("Balão Branco","8 - Coletar Balão cor BRANCO, siga os passos CORRETAMENTE:\n\n1. Aperte OK;\n2. Posicione o mouse sobre o balão BRANCO (NÃO clique);\n3. Com o mouse em cima, aperte F12","Coordenadas do balão BRANCO coletadas com SUCESSO.", "x_branco", "y_branco")
 
-        quest = messagebox.askquestion("Confirmar",
-                                       "Coordenadas coletadas com sucesso.\nCaso ache que algo dê errado, aperte YES para coletar novamente, e NO para prosseguir.")
+        quest = messagebox.askquestion("Confirmar","Coordenadas coletadas com sucesso.\nCaso ache que algo dê errado, aperte YES para coletar novamente, e NO para prosseguir.")
         if quest == 'Yes':
             register_points()
         else:
-            messagebox.showinfo("Sucesso",
-                                "Suas coordenadas foram coletadas e armazenadas com sucesso.\n\nCaso não esteja funcionando corretamente, colete novamente.")
+            messagebox.showinfo("Sucesso","Suas coordenadas foram coletadas e armazenadas com sucesso.\n\nCaso não esteja funcionando corretamente, colete novamente.")
 
 
 
@@ -150,3 +138,7 @@ Label(inicial, text="Desenvolvido por: Juzse, o mais lindo - 2023",background="#
 
 
 inicial.mainloop()
+
+
+
+
