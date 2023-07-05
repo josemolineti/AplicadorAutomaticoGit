@@ -150,7 +150,7 @@ def register_points():
 
 
 
-#CSS---------------------------
+#style---------------------------
 #Botões
 tam_btn = 15
 fundo_btn = "#fff"
